@@ -1,0 +1,900 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Checklist Saúde do Casal · Stefane Rodrigues</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #f7f2eb;
+    --warm-white: #fdfaf6;
+    --terracotta: #9b4a2e;
+    --terracotta-light: #c4714f;
+    --terracotta-pale: #f0ddd6;
+    --brown: #5c3d2e;
+    --brown-light: #8a6553;
+    --gold: #b8934a;
+    --gold-light: #d4aa6a;
+    --sage: #6b7c5e;
+    --green-zone: #4a7c59;
+    --orange-zone: #b8703a;
+    --red-zone: #9b3a3a;
+    --text: #2e1f17;
+    --text-light: #6b5244;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Texture overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 680px;
+    margin: 0 auto;
+    padding: 0 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  .header {
+    text-align: center;
+    padding: 60px 0 48px;
+    position: relative;
+  }
+
+  .header-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    margin-bottom: 24px;
+    opacity: 0.4;
+  }
+
+  .ornament-line {
+    height: 1px;
+    width: 60px;
+    background: var(--terracotta);
+  }
+
+  .ornament-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--terracotta);
+  }
+
+  .header-tag {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--terracotta);
+    font-weight: 500;
+    margin-bottom: 16px;
+  }
+
+  .header h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(38px, 7vw, 54px);
+    font-weight: 300;
+    line-height: 1.15;
+    color: var(--brown);
+    letter-spacing: -0.02em;
+  }
+
+  .header h1 em {
+    font-style: italic;
+    color: var(--terracotta);
+  }
+
+  .header-sub {
+    margin-top: 20px;
+    font-size: 15px;
+    color: var(--text-light);
+    line-height: 1.7;
+    font-weight: 300;
+    max-width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .author-tag {
+    margin-top: 28px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--brown-light);
+    letter-spacing: 0.05em;
+  }
+
+  .author-tag::before, .author-tag::after {
+    content: '';
+    display: block;
+    width: 24px;
+    height: 1px;
+    background: var(--brown-light);
+    opacity: 0.5;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    margin-bottom: 40px;
+    position: sticky;
+    top: 0;
+    background: var(--cream);
+    padding: 16px 0 12px;
+    z-index: 10;
+  }
+
+  .progress-bar-bg {
+    height: 3px;
+    background: rgba(155, 74, 46, 0.15);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--terracotta), var(--gold));
+    border-radius: 99px;
+    transition: width 0.4s ease;
+    width: 0%;
+  }
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-light);
+    letter-spacing: 0.05em;
+  }
+
+  /* SECTIONS */
+  .section-divider {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin: 40px 0 28px;
+  }
+
+  .section-divider-line {
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(155, 74, 46, 0.3), transparent);
+  }
+
+  .section-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--terracotta);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+  }
+
+  /* QUESTION CARD */
+  .question-card {
+    background: var(--warm-white);
+    border: 1px solid rgba(155, 74, 46, 0.12);
+    border-radius: 16px;
+    padding: 24px 28px;
+    margin-bottom: 16px;
+    transition: all 0.2s ease;
+    position: relative;
+  }
+
+  .question-card:hover {
+    border-color: rgba(155, 74, 46, 0.25);
+    box-shadow: 0 4px 20px rgba(155, 74, 46, 0.06);
+  }
+
+  .question-card.answered {
+    border-color: rgba(155, 74, 46, 0.3);
+    background: linear-gradient(135deg, var(--warm-white), rgba(240, 221, 214, 0.2));
+  }
+
+  .question-number {
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    color: var(--terracotta);
+    font-weight: 500;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .question-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.4;
+    color: var(--brown);
+    margin-bottom: 20px;
+  }
+
+  .options-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+
+  @media (max-width: 480px) {
+    .options-grid { grid-template-columns: 1fr; }
+  }
+
+  .option-btn {
+    border: 1.5px solid rgba(155, 74, 46, 0.2);
+    background: transparent;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--text-light);
+    cursor: pointer;
+    transition: all 0.18s ease;
+    text-align: left;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .option-btn:hover {
+    border-color: var(--terracotta-light);
+    color: var(--brown);
+    background: rgba(240, 221, 214, 0.3);
+  }
+
+  .option-btn.selected {
+    border-color: var(--terracotta);
+    background: var(--terracotta-pale);
+    color: var(--terracotta);
+    font-weight: 500;
+  }
+
+  .option-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    border: 1.5px solid currentColor;
+    flex-shrink: 0;
+    transition: all 0.18s ease;
+  }
+
+  .option-btn.selected .option-dot {
+    background: var(--terracotta);
+    border-color: var(--terracotta);
+  }
+
+  /* LEAD FORM */
+  .lead-section {
+    background: var(--warm-white);
+    border: 1px solid rgba(155, 74, 46, 0.15);
+    border-radius: 20px;
+    padding: 36px 32px;
+    margin: 40px 0;
+    text-align: center;
+  }
+
+  .lead-intro-icon {
+    font-size: 32px;
+    margin-bottom: 16px;
+  }
+
+  .lead-section h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 28px;
+    font-weight: 300;
+    color: var(--brown);
+    margin-bottom: 18px;
+    line-height: 1.3;
+  }
+
+  .lead-intro-text {
+    font-size: 14.5px;
+    color: var(--text-light);
+    line-height: 1.8;
+    margin-bottom: 20px;
+    text-align: left;
+  }
+
+  .lead-cta-sub {
+    font-size: 13px;
+    color: var(--brown-light);
+    margin-bottom: 20px;
+    font-style: italic;
+  }
+
+  .input-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .form-input {
+    width: 100%;
+    padding: 14px 18px;
+    border: 1.5px solid rgba(155, 74, 46, 0.2);
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    color: var(--text);
+    background: var(--cream);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .form-input:focus {
+    border-color: var(--terracotta);
+  }
+
+  .form-input::placeholder { color: var(--brown-light); opacity: 0.6; }
+
+  /* BUTTONS */
+  .btn-primary {
+    width: 100%;
+    padding: 16px 32px;
+    background: var(--terracotta);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    letter-spacing: 0.02em;
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-primary:hover {
+    background: var(--brown);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(155, 74, 46, 0.3);
+  }
+
+  .btn-primary:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+  }
+
+  /* RESULTADO */
+  #result-section {
+    display: none;
+    animation: fadeUp 0.6s ease forwards;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .result-hero {
+    text-align: center;
+    padding: 48px 24px 40px;
+    border-radius: 20px;
+    margin-bottom: 32px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .result-hero.green { background: linear-gradient(135deg, #e8f4ed, #f0f8f2); border: 1px solid rgba(74, 124, 89, 0.2); }
+  .result-hero.orange { background: linear-gradient(135deg, #fdf0e8, #fdf6f0); border: 1px solid rgba(184, 112, 58, 0.2); }
+  .result-hero.red { background: linear-gradient(135deg, #fde8e8, #fdf0f0); border: 1px solid rgba(155, 58, 58, 0.2); }
+
+  .result-zone-label {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    font-weight: 500;
+    padding: 6px 16px;
+    border-radius: 99px;
+    margin-bottom: 20px;
+  }
+
+  .green .result-zone-label { background: rgba(74, 124, 89, 0.12); color: var(--green-zone); }
+  .orange .result-zone-label { background: rgba(184, 112, 58, 0.12); color: var(--orange-zone); }
+  .red .result-zone-label { background: rgba(155, 58, 58, 0.12); color: var(--red-zone); }
+
+  .result-score {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 72px;
+    font-weight: 300;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .green .result-score { color: var(--green-zone); }
+  .orange .result-score { color: var(--orange-zone); }
+  .red .result-score { color: var(--red-zone); }
+
+  .result-score-label {
+    font-size: 13px;
+    color: var(--text-light);
+    margin-bottom: 24px;
+  }
+
+  .result-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 30px;
+    font-weight: 400;
+    color: var(--brown);
+    margin-bottom: 16px;
+    line-height: 1.2;
+  }
+
+  .result-text {
+    font-size: 15px;
+    color: var(--text-light);
+    line-height: 1.75;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* CTA lista de espera */
+  .cta-box {
+    background: var(--warm-white);
+    border: 1px solid rgba(155, 74, 46, 0.15);
+    border-radius: 20px;
+    padding: 36px 32px;
+    text-align: center;
+    margin-bottom: 24px;
+  }
+
+  .cta-box h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 26px;
+    font-weight: 300;
+    color: var(--brown);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .cta-box p {
+    font-size: 14px;
+    color: var(--text-light);
+    line-height: 1.7;
+    margin-bottom: 24px;
+  }
+
+  .waitlist-form .input-group {
+    margin-bottom: 16px;
+  }
+
+  .waitlist-form .btn-primary {
+    background: var(--brown);
+  }
+
+  .waitlist-form .btn-primary:hover {
+    background: var(--terracotta);
+  }
+
+  .success-msg {
+    display: none;
+    padding: 16px;
+    background: rgba(74, 124, 89, 0.08);
+    border: 1px solid rgba(74, 124, 89, 0.2);
+    border-radius: 10px;
+    color: var(--green-zone);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .disclaimer {
+    margin-top: 32px;
+    padding: 20px 24px;
+    background: rgba(155, 74, 46, 0.04);
+    border-left: 3px solid rgba(155, 74, 46, 0.2);
+    border-radius: 4px;
+    font-size: 12px;
+    color: var(--text-light);
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center;
+    padding: 40px 0 0;
+    font-size: 12px;
+    color: var(--brown-light);
+    opacity: 0.7;
+    line-height: 1.8;
+  }
+
+  .footer a {
+    color: var(--terracotta);
+    text-decoration: none;
+  }
+
+  /* Quiz main */
+  #quiz-section { display: block; }
+
+  .submit-area {
+    margin-top: 40px;
+    text-align: center;
+  }
+
+  .not-answered-msg {
+    font-size: 13px;
+    color: var(--terracotta);
+    margin-top: 12px;
+    display: none;
+  }
+
+  /* Pulse animation for unanswered */
+  @keyframes pulse-border {
+    0%, 100% { border-color: rgba(155, 74, 46, 0.2); }
+    50% { border-color: var(--terracotta); }
+  }
+
+  .question-card.highlight {
+    animation: pulse-border 0.8s ease 2;
+  }
+
+  .contact-links {
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  .contact-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--brown-light);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .contact-link:hover { color: var(--terracotta); }
+
+  .btn-whatsapp {
+    background: #25a244 !important;
+  }
+
+  .btn-whatsapp:hover {
+    background: #1e8a38 !important;
+    box-shadow: 0 8px 24px rgba(37, 162, 68, 0.3) !important;
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="header-ornament">
+      <div class="ornament-line"></div>
+      <div class="ornament-dot"></div>
+      <div class="ornament-line"></div>
+    </div>
+    <div class="header-tag">Stefane Rodrigues · Psicóloga CRP 05/73756</div>
+    <h1>Checklist<br><em>Saúde do Casal</em></h1>
+    <p class="header-sub">25 perguntas para você conseguir mapear qual o momento que você está no seu relacionamento hoje.</p>
+    <div class="author-tag">Mestre em Psicologia · Terapeuta de Casais</div>
+  </div>
+
+  <!-- LEAD FORM (antes do quiz) -->
+  <div class="lead-section" id="lead-section">
+    <div class="lead-intro-icon">🌿</div>
+    <h3>Mapear é o primeiro passo<br><em>para transformar.</em></h3>
+    <p class="lead-intro-text">A maioria das pessoas só percebe que algo não vai bem quando o desgaste já tomou conta. Esse checklist existe para te ajudar a enxergar antes, com clareza e sem julgamento, como está a comunicação no seu relacionamento hoje. Porque quando a gente entende o que está acontecendo, fica mais fácil construir algo mais leve, mais seguro e mais verdadeiro com quem ama.</p>
+    <p class="lead-cta-sub">Preencha abaixo para acessar o checklist.</p>
+    <div class="input-group">
+      <input type="text" class="form-input" id="lead-name" placeholder="Seu nome" required>
+      <input type="tel" class="form-input" id="lead-contact" placeholder="Seu WhatsApp ou e-mail" required>
+    </div>
+    <button class="btn-primary" onclick="startQuiz()">Começar o checklist →</button>
+  </div>
+
+  <!-- QUIZ -->
+  <div id="quiz-section" style="display:none;">
+    <div class="progress-wrap">
+      <div class="progress-bar-bg">
+        <div class="progress-bar-fill" id="progress-bar"></div>
+      </div>
+      <div class="progress-label">
+        <span id="progress-text">0 de 25 respondidas</span>
+        <span id="progress-pct">0%</span>
+      </div>
+    </div>
+
+    <div id="questions-container"></div>
+
+    <div class="submit-area">
+      <button class="btn-primary" style="max-width:360px;" onclick="submitQuiz()">Ver meu resultado</button>
+      <p class="not-answered-msg" id="not-answered-msg">⚠ Responda todas as perguntas antes de continuar.</p>
+    </div>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="result-section">
+    <div class="result-hero" id="result-hero">
+      <div class="result-zone-label" id="result-zone-label"></div>
+      <div class="result-score" id="result-score-num"></div>
+      <div class="result-score-label">pontos de 100</div>
+      <div class="result-title" id="result-title"></div>
+      <p class="result-text" id="result-text"></p>
+    </div>
+
+    <!-- CTA LISTA DE ESPERA -->
+    <div class="cta-box">
+      <h3>A terapia de casal<br><em>pode te ajudar.</em></h3>
+      <p>Independente da zona em que você chegou, a terapia de casal é um espaço para fortalecer o vínculo, construir ferramentas reais de comunicação, trabalhar os padrões que se repetem e reconectar vocês dois de um jeito mais consciente e seguro. Não é só para quando está tudo difícil. É também para quem quer ir mais fundo.</p>
+      <p style="margin-bottom:28px;">Se você sentiu que esse resultado tocou em algo, esse pode ser um bom próximo passo.</p>
+
+      <a href="https://wa.me/5521981673673?text=Oi%20Stefane%2C%20fiz%20o%20checklist%20Sa%C3%BAde%20do%20Casal%20e%20quero%20saber%20mais%20sobre%20a%20terapia." target="_blank" class="btn-primary btn-whatsapp" style="display:inline-flex;align-items:center;justify-content:center;gap:10px;max-width:380px;text-decoration:none;margin-bottom:24px;">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.135.564 4.14 1.544 5.876L.057 23.858a.5.5 0 00.606.61l6.207-1.63A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.187-1.459l-.369-.222-3.827 1.006 1.022-3.731-.242-.384A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+        Quero saber mais sobre terapia
+      </a>
+
+      <div class="contact-links">
+        <a href="https://instagram.com/sterodrigues.psi" target="_blank" class="contact-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          @sterodrigues.psi
+        </a>
+        <a href="https://wa.me/5521981673673" target="_blank" class="contact-link">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.135.564 4.14 1.544 5.876L.057 23.858a.5.5 0 00.606.61l6.207-1.63A11.94 11.94 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.94 9.94 0 01-5.187-1.459l-.369-.222-3.827 1.006 1.022-3.731-.242-.384A9.96 9.96 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          (21) 98167-3673
+        </a>
+      </div>
+    </div>
+
+    <div class="disclaimer">
+      Este material não é um instrumento psicológico validado pelo SATEPSI/CFP. É uma ferramenta informativa e reflexiva, desenvolvida com base na prática clínica. Não substitui avaliação psicológica ou acompanhamento terapêutico.
+    </div>
+
+    <div class="footer">
+      <p>Desenvolvido por <strong>Stefane Lima Rodrigues</strong> · CRP 05/73756</p>
+      <p>Mestre em Psicologia · Terapeuta de Casais e Família</p>
+      <p><a href="https://instagram.com/sterodrigues.psi" target="_blank">@sterodrigues.psi</a></p>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const questions = [
+  "Me sinto escutado(a) quando falo algo importante.",
+  "Meu parceiro(a) presta atenção genuína quando estou falando.",
+  "Consigo me expressar com clareza durante uma conversa.",
+  "Sinto que conseguimos nos entender na maioria das vezes.",
+  "Nossas conversas acontecem de forma respeitosa.",
+  "Me sinto seguro(a) para falar o que penso e sinto.",
+  "Consigo ser eu mesmo(a) nas conversas.",
+  "Não sinto medo da reação do meu parceiro(a) ao me expressar.",
+  "Consigo falar sobre assuntos difíceis.",
+  "Me sinto acolhido(a) emocionalmente nas conversas.",
+  "Consigo me colocar no lugar do meu parceiro(a).",
+  "Meu parceiro(a) tenta compreender meus sentimentos.",
+  "Me sinto validado(a), mesmo quando há discordância.",
+  "Existe interesse genuíno em entender o outro.",
+  "Sinto que somos sensíveis às necessidades um do outro.",
+  "Conseguimos conversar sem transformar tudo em briga.",
+  "Nossos conflitos costumam levar a soluções.",
+  "Conseguimos resolver problemas juntos.",
+  "Sabemos pausar uma discussão quando necessário.",
+  "Conseguimos retomar conversas difíceis com mais tranquilidade.",
+  "Me sinto satisfeito(a) com a nossa comunicação.",
+  "Sinto que somos um time.",
+  "Percebo esforço de ambas as partes para fazer a relação dar certo.",
+  "Me sinto conectado(a) emocionalmente com meu parceiro(a).",
+  "De forma geral, me sinto bem dentro desse relacionamento."
+];
+
+const sections = [
+  { start: 0, label: "Escuta e Expressão" },
+  { start: 5, label: "Segurança e Autenticidade" },
+  { start: 10, label: "Empatia e Validação" },
+  { start: 15, label: "Gestão de Conflitos" },
+  { start: 20, label: "Conexão Geral" }
+];
+
+const options = ["Sempre", "Quase sempre", "Às vezes", "Nunca"];
+const scores = [1, 2, 3, 4];
+
+let answers = new Array(25).fill(null);
+let userName = '';
+let userEmail = '';
+
+function startQuiz() {
+  userName = document.getElementById('lead-name').value.trim();
+  userEmail = document.getElementById('lead-contact').value.trim();
+  
+  if (!userName || !userEmail) {
+    alert('Por favor, preencha seu nome e contato para continuar.');
+    return;
+  }
+
+  document.getElementById('lead-section').style.display = 'none';
+  document.getElementById('quiz-section').style.display = 'block';
+  
+  // Salva o lead imediatamente ao iniciar o quiz
+  sendLeadEmail();
+  
+  renderQuestions();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function sendLeadEmail() {
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maqkabkl';
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        nome: userName,
+        contato: userEmail,
+        tipo: 'Lead captado · iniciou o quiz',
+        _subject: `Novo lead · ${userName}`
+      })
+    });
+  } catch (e) { console.log('Lead não enviado:', e); }
+}
+
+function renderQuestions() {
+  const container = document.getElementById('questions-container');
+  let html = '';
+  
+  questions.forEach((q, i) => {
+    // Section divider
+    const section = sections.find(s => s.start === i);
+    if (section) {
+      html += `
+        <div class="section-divider">
+          <div class="section-divider-line"></div>
+          <span class="section-title">${section.label}</span>
+          <div class="section-divider-line"></div>
+        </div>`;
+    }
+    
+    html += `
+      <div class="question-card" id="card-${i}">
+        <div class="question-number">Pergunta ${i + 1}</div>
+        <div class="question-text">${q}</div>
+        <div class="options-grid">`;
+    
+    options.forEach((opt, j) => {
+      html += `
+          <button class="option-btn" onclick="selectOption(${i}, ${j})" id="opt-${i}-${j}">
+            <span class="option-dot"></span>
+            ${opt}
+          </button>`;
+    });
+    
+    html += `</div></div>`;
+  });
+  
+  container.innerHTML = html;
+}
+
+function selectOption(qIndex, optIndex) {
+  answers[qIndex] = scores[optIndex];
+  
+  // Update UI
+  for (let j = 0; j < 4; j++) {
+    const btn = document.getElementById(`opt-${qIndex}-${j}`);
+    btn.classList.toggle('selected', j === optIndex);
+  }
+  
+  const card = document.getElementById(`card-${qIndex}`);
+  card.classList.add('answered');
+  card.classList.remove('highlight');
+  
+  updateProgress();
+}
+
+function updateProgress() {
+  const answered = answers.filter(a => a !== null).length;
+  const pct = Math.round((answered / 25) * 100);
+  
+  document.getElementById('progress-bar').style.width = pct + '%';
+  document.getElementById('progress-text').textContent = `${answered} de 25 respondidas`;
+  document.getElementById('progress-pct').textContent = pct + '%';
+}
+
+function submitQuiz() {
+  const unanswered = answers.map((a, i) => a === null ? i : -1).filter(i => i >= 0);
+  
+  if (unanswered.length > 0) {
+    document.getElementById('not-answered-msg').style.display = 'block';
+    // Scroll to first unanswered
+    const firstCard = document.getElementById(`card-${unanswered[0]}`);
+    firstCard.classList.add('highlight');
+    firstCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  
+  const total = answers.reduce((sum, val) => sum + val, 0);
+  showResult(total);
+}
+
+function showResult(total) {
+  document.getElementById('quiz-section').style.display = 'none';
+  const resultSection = document.getElementById('result-section');
+  resultSection.style.display = 'block';
+  
+  const hero = document.getElementById('result-hero');
+  const zoneLabel = document.getElementById('result-zone-label');
+  const scoreNum = document.getElementById('result-score-num');
+  const title = document.getElementById('result-title');
+  const text = document.getElementById('result-text');
+  
+  scoreNum.textContent = total;
+  
+  let zone, zoneText, titleText, bodyText;
+  
+  if (total <= 45) {
+    zone = 'green';
+    zoneText = '🟢 Zona Verde · Relação Saudável';
+    titleText = 'Seu relacionamento tem uma base bonita.';
+    bodyText = 'Sua relação apresenta uma base saudável, com espaço para escuta e diálogo. Vocês têm facilidade de se conectar um com o outro e de resolver os conflitos de forma leve. Continue cuidando disso.';
+  } else if (total <= 75) {
+    zone = 'orange';
+    zoneText = '🟠 Zona de Atenção · Relação Instável';
+    titleText = 'Existem pontos que merecem atenção.';
+    bodyText = 'Existem sinais de dificuldade na comunicação, que podem gerar ruídos e desgaste na relação. Vocês conseguem, muitas vezes, resolver as demandas de forma assertiva. Mas há momentos de dificuldade que, se não trabalhados, podem gerar distanciamento emocional.';
+  } else {
+    zone = 'red';
+    zoneText = '🔴 Zona Vermelha · Relacionamento em Alerta';
+    titleText = 'Sua comunicação pede cuidado urgente.';
+    bodyText = 'Sua comunicação apresenta sinais importantes de alerta, com possíveis dificuldades de escuta, expressão e resolução de conflitos. Vale a pena olhar com mais cuidado para essa dinâmica e aprender habilidades que podem te ajudar a se conectar com quem você ama.';
+  }
+  
+  hero.className = 'result-hero ' + zone;
+  zoneLabel.textContent = zoneText;
+  title.textContent = titleText;
+  text.textContent = bodyText;
+  
+  // Send result to email via Formspree
+  sendResultEmail(total, zone);
+  
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+async function sendResultEmail(total, zone) {
+  const FORMSPREE_ENDPOINT = 'https://formspree.io/f/maqkabkl';
+  const zoneNames = { green: 'Zona Verde', orange: 'Zona de Atenção', red: 'Zona Vermelha' };
+  try {
+    await fetch(FORMSPREE_ENDPOINT, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        nome: userName,
+        contato: userEmail,
+        pontuacao: total,
+        zona: zoneNames[zone],
+        tipo: 'Resultado do quiz concluído',
+        _subject: `Quiz concluído · ${userName} · ${total} pts · ${zoneNames[zone]}`
+      })
+    });
+  } catch (e) { console.log('Email não enviado:', e); }
+}
+</script>
+</body>
+</html>
